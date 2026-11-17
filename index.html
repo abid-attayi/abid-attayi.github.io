@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abid Attayi Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a product page for an engineer. True black, one centered column, large tight
+   sentence-case headlines, soft dark cards. Colour comes only from a copper-to-rose gradient
+   (PCB copper) on key words and from live hardware visuals. Single dark theme by choice. */
+:root {
+  --bg: #000000;
+  --card: #111113;
+  --card-2: #18181B;
+  --ink: #F5F5F7;
+  --muted: #A1A1A6;
+  --dim: #5E5E66;
+  --line: rgba(255,255,255,.09);
+  --amber: #FFB340;
+  --cyan: #40C8E0;
+  --grad: linear-gradient(92deg, #FFC857 0%, #FF8A3D 48%, #FF5C8A 100%);
+  --grad-2: linear-gradient(92deg, #5EE7DF 0%, #4D8DFF 100%);
+  --grad-3: linear-gradient(92deg, #8BF5A5 0%, #2DD4BF 100%);
+  --grad-4: linear-gradient(92deg, #C59BFF 0%, #FF6FB5 100%);
+  --sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ease: cubic-bezier(.16,.84,.24,1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: #FF8A3D; color: #000; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.g, .g2, .g3, .g4 { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.g2 { background-image: var(--grad-2); } .g3 { background-image: var(--grad-3); } .g4 { background-image: var(--grad-4); }
+.nb { white-space: nowrap; }
+
+/* ---------- nav ---------- */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; background: rgba(0,0,0,.6); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid transparent; transition: border-color .3s; }
+.nav.solid { border-bottom-color: var(--line); }
+.nav .wrap { height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { font-weight: 700; font-size: 17px; letter-spacing: -.02em; text-decoration: none; }
+.nav nav { display: flex; align-items: center; gap: 30px; }
+.nav nav a { font-size: 14px; text-decoration: none; color: var(--muted); transition: color .2s; }
+.nav nav a:hover, .nav nav a.on { color: var(--ink); }
+.nav nav a.pill { color: #000; background: var(--ink); padding: 7px 16px; border-radius: 999px; font-weight: 600; transition: transform .25s var(--ease), background .25s; }
+.nav nav a.pill:hover { transform: scale(1.05); background: #fff; }
+.progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--grad); transform: scaleX(0); transform-origin: left; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; padding: 190px 0 120px; text-align: center; overflow: hidden; }
+#traces { position: absolute; inset: 0; width: 100%; height: 100%; }
+.glow { position: absolute; left: 50%; top: 46%; width: min(1100px, 130vw); height: 620px; transform: translate(-50%, -50%); pointer-events: none; filter: blur(70px); opacity: .55;
+  background: radial-gradient(closest-side at 32% 55%, rgba(255,138,61,.5), transparent), radial-gradient(closest-side at 68% 45%, rgba(255,92,138,.38), transparent), radial-gradient(closest-side at 50% 75%, rgba(255,200,87,.3), transparent);
+  animation: drift 14s ease-in-out infinite alternate; }
+@keyframes drift { to { transform: translate(-48%, -53%) scale(1.08); } }
+.hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 58% 52% at 50% 46%, rgba(0,0,0,.82) 0%, rgba(0,0,0,.45) 60%, transparent 100%), linear-gradient(180deg, transparent 70%, #000 100%); }
+.hero .wrap { position: relative; z-index: 2; }
+.status { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink); text-decoration: none; padding: 8px 16px 8px 14px; border-radius: 999px; background: rgba(255,255,255,.07); border: 1px solid var(--line); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: background .25s; }
+.status:hover { background: rgba(255,255,255,.12); }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: ping 2.2s infinite; }
+.status span { color: var(--muted); }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(52,211,153,0); } 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); } }
+.who { font-weight: 600; font-size: 19px; letter-spacing: -.01em; margin: 44px 0 10px; }
+h1 { margin: 0; font-weight: 700; font-size: clamp(54px, 10.6vw, 148px); line-height: .98; letter-spacing: -.055em; }
+h1 .w { display: inline-block; opacity: 0; transform: translateY(.35em); filter: blur(12px); animation: word 1.1s var(--ease) forwards; animation-delay: calc(var(--i) * 110ms + 150ms); padding-bottom: .08em; }
+@keyframes word { to { opacity: 1; transform: none; filter: none; } }
+.lede { font-size: clamp(18px, 2vw, 23px); line-height: 1.4; color: var(--muted); max-width: 30em; margin: 30px auto 0; text-wrap: balance; }
+.cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 26px; margin-top: 40px; }
+.btn { display: inline-block; font-size: 17px; font-weight: 600; text-decoration: none; color: #000; background: var(--ink); padding: 14px 28px; border-radius: 999px; transition: transform .3s var(--ease), box-shadow .3s; }
+.btn:hover { transform: scale(1.05); box-shadow: 0 10px 44px rgba(255,138,61,.4); }
+.tl { font-size: 17px; text-decoration: none; color: var(--amber); }
+.tl::after { content: " \203A"; display: inline-block; transition: transform .25s var(--ease); margin-left: 3px; }
+.tl:hover::after { transform: translateX(4px); }
+.fade-in { opacity: 0; animation: fade 1s var(--ease) forwards; animation-delay: var(--d, .6s); }
+@keyframes fade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* ---------- ticker ---------- */
+.ticker { overflow: hidden; white-space: nowrap; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); }
+.ticker div { display: inline-flex; animation: slide 40s linear infinite; }
+.ticker span { font-size: 15px; font-weight: 500; color: var(--dim); padding: 0 26px; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* ---------- sections ---------- */
+section { padding: 130px 0; position: relative; }
+h2 { font-weight: 700; font-size: clamp(40px, 6.2vw, 80px); line-height: 1.02; letter-spacing: -.045em; margin: 0; text-wrap: balance; }
+.sub { font-size: clamp(18px, 2vw, 22px); color: var(--muted); max-width: 28em; margin: 18px 0 0; line-height: 1.4; text-wrap: balance; }
+.head { margin-bottom: 60px; }
+.eyebrow { font-size: 14px; font-weight: 600; color: var(--amber); margin: 0 0 14px; }
+h3 { font-weight: 700; font-size: 28px; line-height: 1.12; letter-spacing: -.03em; margin: 0; text-wrap: balance; }
+.card { position: relative; background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 26px; overflow: hidden; transition: transform .5s var(--ease), border-color .3s; }
+.card::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s; background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 50%), rgba(255,160,80,.10), transparent 60%); }
+.card:hover { border-color: rgba(255,255,255,.14); }
+.card:hover::before { opacity: 1; }
+.card > * { position: relative; }
+.lift:hover { transform: translateY(-6px); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.chips span { font-size: 13px; color: var(--muted); background: rgba(255,255,255,.06); border-radius: 999px; padding: 5px 12px; }
+ul.pts { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 12px; color: #D2D2D7; font-size: 17px; }
+ul.pts li { position: relative; padding-left: 22px; }
+ul.pts li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--grad); }
+ul.pts b { color: var(--ink); font-weight: 600; }
+
+/* ---------- numbers ---------- */
+.nums { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.num { padding: 34px 36px 38px; }
+.num small { display: block; font-size: 14px; color: var(--muted); }
+.num strong { display: block; font-weight: 700; font-size: clamp(64px, 9vw, 112px); line-height: 1; letter-spacing: -.05em; margin: 18px 0 16px; width: fit-content; font-variant-numeric: tabular-nums; }
+.num p { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; max-width: 17em; }
+
+/* ---------- experience ---------- */
+.jobs { display: grid; gap: 20px; }
+.job { display: grid; grid-template-columns: 300px 1fr; gap: 40px; padding: 40px; }
+.job .co { font-weight: 700; font-size: 32px; letter-spacing: -.035em; line-height: 1.05; }
+.job .role { font-size: 18px; font-weight: 600; margin-top: 12px; line-height: 1.3; }
+.job .when { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.job ul.pts { margin-top: 0; }
+.now { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: #34D399; background: rgba(52,211,153,.12); border-radius: 999px; padding: 4px 11px; margin-bottom: 16px; }
+.now i { width: 6px; height: 6px; border-radius: 50%; background: #34D399; }
+details { margin-top: 20px; }
+summary { font-size: 16px; cursor: pointer; color: var(--amber); width: fit-content; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: " +"; }
+details[open] summary::after { content: " \2212"; }
+details ul.pts { margin-top: 16px; }
+
+.trim { margin-top: 26px; border-radius: 18px; background: #000; border: 1px solid var(--line); padding: 18px 20px 16px; }
+.trim header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.trim header b { color: var(--amber); font-weight: 500; }
+.track { position: relative; height: 44px; margin: 16px 0 12px; border-radius: 10px; background: var(--card-2); overflow: hidden; }
+.track .range { position: absolute; top: 0; bottom: 0; left: 0; width: 100%; background: rgba(64,200,224,.2); border-left: 2px solid var(--cyan); border-right: 2px solid var(--cyan); transition: left .55s var(--ease), width .55s var(--ease); }
+.track .target { position: absolute; top: 0; bottom: 0; left: 63%; width: 2px; background: var(--amber); box-shadow: 0 0 14px var(--amber); }
+.track .probe { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--ink); transition: left .45s var(--ease), background .3s, box-shadow .3s; }
+.track .probe.hit { background: var(--amber); box-shadow: 0 0 0 6px rgba(255,179,64,.25); }
+.trim p { margin: 0; font-family: var(--mono); font-size: 12.5px; color: var(--muted); min-height: 1.6em; }
+.trim p.ok { color: var(--amber); }
+
+/* ---------- kernel story ---------- */
+.kernel { background: linear-gradient(180deg, #000 0%, #0A0A0C 18%, #0A0A0C 82%, #000 100%); }
+.story { display: grid; grid-template-columns: 1fr 1.08fr; gap: 64px; align-items: start; }
+.steps { display: grid; }
+.step { padding: 9vh 0; border-top: 1px solid var(--line); opacity: .32; transition: opacity .6s var(--ease); }
+.step:first-child { border-top: 0; padding-top: 0; }
+.step.on { opacity: 1; }
+.step .k { font-family: var(--mono); font-size: 13px; color: var(--amber); }
+.step h3 { font-size: clamp(30px, 3.6vw, 46px); letter-spacing: -.04em; margin-top: 14px; }
+.step p { margin: 16px 0 0; color: var(--muted); font-size: 19px; line-height: 1.5; max-width: 24em; }
+.step p b { color: var(--ink); font-weight: 600; }
+.sticky { position: sticky; top: 96px; }
+.viz-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.viz-head b { color: var(--amber); font-weight: 500; }
+#sched { display: block; width: 100%; height: 320px; }
+.viz-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 22px; border-top: 1px solid var(--line); }
+.viz-foot > span { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.viz-foot > span b { color: var(--cyan); font-weight: 500; }
+.ctl { display: flex; gap: 8px; }
+.ctl button { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(255,255,255,.08); border: 0; border-radius: 999px; padding: 8px 15px; cursor: pointer; transition: background .2s, transform .2s var(--ease); }
+.ctl button:hover:not(:disabled) { background: rgba(255,255,255,.18); transform: scale(1.05); }
+.ctl button:disabled { opacity: .3; cursor: default; }
+.fine { font-size: 14px; color: var(--dim); margin: 16px 4px 0; }
+
+/* ---------- more projects ---------- */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.proj { display: flex; flex-direction: column; }
+.proj .screen { height: 170px; background: #000; border-bottom: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; }
+.proj .body { padding: 28px 28px 30px; display: flex; flex-direction: column; flex: 1; }
+.proj small { font-size: 13px; font-weight: 600; color: var(--amber); }
+.proj h3 { margin-top: 10px; font-size: 26px; }
+.proj p { margin: 12px 0 0; color: var(--muted); font-size: 17px; line-height: 1.45; }
+.proj .tl { margin-top: 16px; font-size: 16px; width: fit-content; }
+.proj .chips { margin-top: auto; padding-top: 24px; }
+.boot { list-style: none; margin: 0; padding: 0 30px; width: 100%; font-family: var(--mono); font-size: 13.5px; display: grid; gap: 8px; }
+.boot li { color: var(--dim); display: flex; gap: 10px; transition: color .3s; }
+.boot li::before { content: "\2713"; color: transparent; transition: color .3s; }
+.boot li.on { color: var(--ink); }
+.boot li.on::before { content: "\25B8"; color: var(--amber); }
+.boot li.done { color: var(--muted); }
+.boot li.done::before { color: #34D399; }
+.oled { font-family: var(--mono); text-align: center; }
+.oled time { display: block; font-size: 42px; font-weight: 500; letter-spacing: .02em; color: var(--cyan); text-shadow: 0 0 26px rgba(64,200,224,.5); font-variant-numeric: tabular-nums; }
+.oled small { display: block; margin-top: 6px; font-size: 11px; letter-spacing: .14em; color: var(--dim); font-weight: 400; }
+#quad { width: 100%; height: 170px; display: block; }
+
+/* ---------- warg ---------- */
+.can { overflow: hidden; white-space: nowrap; margin: 0 0 44px; padding: 13px 0; font-family: var(--mono); font-size: 12.5px; color: var(--dim); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.can div { display: inline-flex; gap: 44px; padding-right: 44px; animation: slide 48s linear infinite; }
+.can b { color: var(--cyan); font-weight: 400; }
+.team { padding: 32px 30px 34px; }
+.team .n { font-family: var(--mono); font-size: 13px; color: var(--amber); }
+.team h3 { margin-top: 44px; font-size: 26px; }
+.team p { margin: 12px 0 0; color: var(--muted); font-size: 17px; line-height: 1.45; }
+.team p b { color: var(--ink); font-weight: 600; }
+
+/* ---------- about ---------- */
+.about { display: grid; grid-template-columns: 1.1fr 1fr; gap: 72px; align-items: start; }
+.about .bio p { font-size: clamp(20px, 2.1vw, 25px); line-height: 1.42; letter-spacing: -.015em; margin: 0 0 22px; color: var(--muted); }
+.about .bio p b { color: var(--ink); font-weight: 600; }
+.kit { display: grid; gap: 26px; }
+.kit h4 { font-size: 14px; font-weight: 600; color: var(--muted); margin: 0 0 12px; }
+.kit .chips { margin-top: 0; }
+.kit .chips span { font-size: 15px; color: var(--ink); padding: 7px 14px; transition: background .2s, transform .2s var(--ease); }
+.kit .chips span:hover { background: rgba(255,160,80,.22); transform: translateY(-2px); }
+.edu { margin-top: 6px; padding-top: 26px; border-top: 1px solid var(--line); font-size: 16px; color: var(--muted); line-height: 1.5; }
+.edu b { display: block; color: var(--ink); font-weight: 600; }
+
+/* ---------- contact ---------- */
+.contact { text-align: center; padding-bottom: 90px; overflow: hidden; }
+.contact .glow { top: 30%; opacity: .4; height: 480px; }
+.contact .wrap { position: relative; z-index: 2; }
+.contact h2 { font-size: clamp(52px, 9.6vw, 132px); letter-spacing: -.055em; line-height: .98; }
+.contact .sub { margin-left: auto; margin-right: auto; }
+.links { margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: left; }
+.links a { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 26px 28px; text-decoration: none; }
+.links a small { display: block; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+.links a strong { font-size: clamp(18px, 2.1vw, 24px); font-weight: 600; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.links a em { font-style: normal; font-size: 22px; color: var(--muted); transition: transform .35s var(--ease), color .3s; }
+.links a:hover em { transform: translate(4px, -4px); color: var(--amber); }
+footer { padding: 30px 0 44px; border-top: 1px solid var(--line); font-size: 13px; color: var(--dim); }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- scroll reveal (script hides only what starts below the fold) ---------- */
+.rv.pre { opacity: 0; transform: translateY(48px) scale(.985); filter: blur(6px); }
+.rv.pre.in { opacity: 1; transform: none; filter: none; transition: opacity 1s var(--ease), transform 1s var(--ease), filter 1s var(--ease); transition-delay: var(--rd, 0ms); }
+
+@media (max-width: 960px) {
+  .job { grid-template-columns: 1fr; gap: 24px; padding: 30px 26px; }
+  .story { grid-template-columns: 1fr; gap: 36px; }
+  .sticky { position: static; order: -1; }
+  .step { padding: 34px 0; opacity: 1; }
+  .grid3 { grid-template-columns: 1fr; }
+  .about { grid-template-columns: 1fr; gap: 48px; }
+  section { padding: 96px 0; }
+}
+@media (max-width: 680px) {
+  body { font-size: 17px; }
+  .nav nav a:not(.pill) { display: none; }
+  .hero { padding: 140px 0 88px; }
+  .nums, .links { grid-template-columns: 1fr; }
+  .num { padding: 28px 26px 30px; }
+  .head { margin-bottom: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  h1 .w, .fade-in { opacity: 1; transform: none; filter: none; }
+  .step { opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Abid Attayi</a>
+    <nav aria-label="Sections">
+      <a href="#kernel">Kernel</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#about">About</a>
+      <a class="pill" href="#contact">Contact</a>
+    </nav>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main id="top">
+
+<div class="hero" id="hero">
+  <canvas id="traces" aria-hidden="true"></canvas>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap" id="heroIn">
+    <a class="status fade-in" style="--d:.05s" href="#experience"><i></i>Now at onsemi <span>Embedded Systems Validation</span></a>
+    <p class="who fade-in" style="--d:.15s">Abid Attayi</p>
+    <h1 aria-label="Close to the metal.">
+      <span class="w" style="--i:0" aria-hidden="true">Close</span>
+      <span class="w" style="--i:1" aria-hidden="true">to</span>
+      <span class="w" style="--i:2" aria-hidden="true">the</span>
+      <span class="w g" style="--i:3" aria-hidden="true">metal.</span>
+    </h1>
+    <p class="lede fade-in" style="--d:.75s">I write embedded firmware for real hardware: RTOS kernels, device drivers and flight software. Mechatronics Engineering at the University of Waterloo.</p>
+    <div class="cta fade-in" style="--d:.9s">
+      <a class="btn" href="#kernel">See my work</a>
+      <a class="tl" href="https://github.com/abid-attayi" target="_blank" rel="noopener">GitHub</a>
+      <a class="tl" href="https://www.linkedin.com/in/abid-attayi/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</div>
+
+<div class="ticker" aria-hidden="true">
+  <div>
+    <span>C</span><span>Python</span><span>STM32</span><span>ARM Cortex-M</span><span>RTOS</span><span>SPI</span><span>I2C</span><span>UART</span><span>CAN</span><span>VHDL</span><span>OpenOCD</span><span>PyVISA</span><span>Raspberry Pi</span>
+    <span>C</span><span>Python</span><span>STM32</span><span>ARM Cortex-M</span><span>RTOS</span><span>SPI</span><span>I2C</span><span>UART</span><span>CAN</span><span>VHDL</span><span>OpenOCD</span><span>PyVISA</span><span>Raspberry Pi</span>
+  </div>
+</div>
+
+<section id="numbers">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="rv">Measured, <span class="g">not guessed.</span></h2>
+      <p class="sub rv">Real numbers from firmware I wrote and hardware I brought up.</p>
+    </div>
+    <div class="nums">
+      <div class="num card lift rv" style="--rd:0ms"><small>RTOS kernel</small><strong class="g"><b data-count="16">16</b></strong><p>Threads scheduled by a kernel I wrote from scratch in C.</p></div>
+      <div class="num card lift rv" style="--rd:90ms"><small>WARG flight firmware</small><strong class="g2"><b data-count="200">200</b>+</strong><p>CAN frames my STM32 firmware decodes and stores every second.</p></div>
+      <div class="num card lift rv" style="--rd:0ms"><small>Teledyne DALSA</small><strong class="g3"><b data-count="5">5</b>+</strong><p>Embedded subsystems running on SPI, I2C and UART drivers I wrote.</p></div>
+      <div class="num card lift rv" style="--rd:90ms"><small>onsemi</small><strong class="g4"><b data-count="40">40</b>+</strong><p>Sensors validated on a mixed-signal ASIC program.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="kernel" class="kernel">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow rv">Featured project</p>
+      <h2 class="rv">An RTOS kernel, <span class="g">from scratch.</span></h2>
+      <p class="sub rv">A pre-emptive multithreading kernel in C on an STM32 (ARM Cortex-M4). Written solo. It is not a port of an existing RTOS.</p>
+    </div>
+
+    <div class="story">
+      <div class="steps">
+        <div class="step on">
+          <span class="k">01 &middot; SysTick</span>
+          <h3>It starts with a 1&nbsp;ms tick.</h3>
+          <p>SysTick fires every millisecond and counts down the running thread's time budget. That tick is the kernel's clock.</p>
+        </div>
+        <div class="step">
+          <span class="k">02 &middot; PendSV</span>
+          <h3>Time's up. Swap.</h3>
+          <p>When the budget hits zero the kernel pends <b>PendSV</b>, which saves the outgoing thread's registers and stack pointer.</p>
+        </div>
+        <div class="step">
+          <span class="k">03 &middot; Scheduler</span>
+          <h3>Round-robin picks who's next.</h3>
+          <p>The scheduler advances to the next thread and reloads its timeslice. Up to <b>16 threads</b>, each with a 1 KB stack carved from a 16 KB pool.</p>
+        </div>
+        <div class="step">
+          <span class="k">04 &middot; SVC</span>
+          <h3>System calls stay safe.</h3>
+          <p>Calls go through <b>SVC</b>, which outranks PendSV, so a call is never interrupted mid-switch. Cooperative and pre-emptive threads run side by side.</p>
+        </div>
+      </div>
+
+      <div class="sticky">
+        <div class="card rv">
+          <div class="viz-head"><span>Live scheduler</span><b>Round-robin, 1 ms tick</b></div>
+          <canvas id="sched" role="img" aria-label="Live trace of threads taking turns on the CPU under a round-robin scheduler"></canvas>
+          <div class="viz-foot">
+            <span id="schedMsg">Running <b>thread 0</b></span>
+            <div class="ctl">
+              <button type="button" id="thAdd">Add thread</button>
+              <button type="button" id="thDel">Remove</button>
+              <button type="button" id="thPause">Pause</button>
+            </div>
+          </div>
+        </div>
+        <p class="fine">A simulation of the scheduling policy. I wrote all of the kernel's C; the assembly stubs came with the course.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="rv">More builds.</h2>
+      <p class="sub rv">Smaller projects, all on real boards or real logic.</p>
+    </div>
+    <div class="grid3">
+      <article class="proj card lift rv" style="--rd:0ms">
+        <div class="screen"><ul class="boot" id="boot" aria-hidden="true"><li>Reset_Handler</li><li>copy .data to RAM</li><li>zero .bss</li><li>main()</li></ul></div>
+        <div class="body">
+          <small>In progress</small>
+          <h3>Bare-metal STM32F401</h3>
+          <p>Built with no IDE: my own startup code, linker script and Makefile. A custom bootloader comes next.</p>
+          <a class="tl" href="https://github.com/abid-attayi/stm32f401-bare-metal" target="_blank" rel="noopener">View on GitHub</a>
+          <div class="chips"><span>C</span><span>Make</span><span>Linker script</span></div>
+        </div>
+      </article>
+      <article class="proj card lift rv" style="--rd:110ms">
+        <div class="screen"><div class="oled" aria-hidden="true"><time id="clock">12:00:00</time><small>YOUR TIME, RIGHT NOW</small></div></div>
+        <div class="body">
+          <small>2026</small>
+          <h3>STM32 alarm clock</h3>
+          <p>RTC timekeeping, an OLED display over I2C running on drivers I wrote, and an interrupt-driven rotary encoder to set the alarm.</p>
+          <div class="chips"><span>C</span><span>I2C</span><span>RTC</span><span>Interrupts</span></div>
+        </div>
+      </article>
+      <article class="proj card lift rv" style="--rd:220ms">
+        <div class="screen"><canvas id="quad" aria-hidden="true"></canvas></div>
+        <div class="body">
+          <small>2025 &middot; Pair project</small>
+          <h3>Quadrature encoder decoder</h3>
+          <p>An x4 decoder in VHDL driving a 5-bit up/down counter, checked in simulation with a self-checking testbench.</p>
+          <div class="chips"><span>VHDL</span><span>FSM</span><span>Testbench</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="warg" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow rv">Design team &middot; Since Sep 2025</p>
+      <h2 class="rv">Flight firmware <span class="g2">at WARG.</span></h2>
+      <p class="sub rv">Embedded Firmware Developer on the flight software subteam of the Waterloo Aerial Robotics Group.</p>
+    </div>
+  </div>
+  <div class="can" aria-hidden="true"><div id="canFeed"></div></div>
+  <div class="wrap">
+    <div class="grid3">
+      <article class="team card lift rv" style="--rd:0ms">
+        <span class="n">01</span>
+        <h3>Remote flash and debug</h3>
+        <p>A networked Raspberry Pi that takes firmware over the network and flashes a target STM32 over SWD with OpenOCD, so the team can flash and debug boards <b>without being in the lab</b>.</p>
+      </article>
+      <article class="team card lift rv" style="--rd:110ms">
+        <span class="n">02</span>
+        <h3>CAN data logger</h3>
+        <p>STM32 firmware in C that parses CAN frames into DroneCAN messages and stores them to SD card for flight diagnostics, at <b>over 200 frames per second</b>.</p>
+      </article>
+      <article class="team card lift rv" style="--rd:220ms">
+        <span class="n">03</span>
+        <h3>Motor tester</h3>
+        <p>STM32 firmware in C that reads ADC inputs over SPI and turns them into timer-generated PWM for servo validation, with 10-bit resolution and <b>under 1 ms response</b>.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="head">
+      <h2 class="rv">Experience.</h2>
+      <p class="sub rv">Three co-op terms, each one a layer closer to the silicon.</p>
+    </div>
+
+    <div class="jobs">
+      <article class="job card rv">
+        <div>
+          <span class="now"><i></i>Now</span>
+          <div class="co">onsemi</div>
+          <div class="role">Embedded Systems Validation Developer</div>
+          <div class="when">Sep 2026 to Present &middot; Waterloo, ON</div>
+        </div>
+        <div>
+          <ul class="pts">
+            <li>Bring up a mixed-signal biosensor ASIC for glucose monitoring <b>at the register level over SPI</b>, and own its oscillator trim routine: a binary search converges on the target frequency, then I burn the final code to OTP.</li>
+            <li>Wrote a temperature and humidity <b>sensor driver from the datasheet</b> on a software I2C bus, with CRC-8 checks and retries.</li>
+            <li>Helped design the automated bench around it: instruments on GPIB and LAN, driven by a headless Raspberry Pi.</li>
+          </ul>
+          <div class="trim" id="trim">
+            <header><span>Oscillator trim, binary search</span><b>Target 40.96 kHz &plusmn;200 Hz</b></header>
+            <div class="track"><div class="range" id="trRange"></div><div class="target"></div><div class="probe" id="trProbe"></div></div>
+            <p id="trMsg">Each measurement halves the pool of candidate trim codes.</p>
+          </div>
+          <details>
+            <summary>More from this term</summary>
+            <ul class="pts">
+              <li>Traced suspicious leakage data at 60 °C to the test fixture instead of the silicon. Re-probing at the die-adjacent pin cut the leakage bound from 281 pA to under 18 pA.</li>
+              <li>Found a trim helper that silently returned -1 on unburned parts, so invalid trims were being written. Fixing it dropped supply current from 165.9 to 151.7 µA.</li>
+              <li>Wrote an on-die self-check that sends the chip's 25 nA calibration source through the same measurement path. Both channels agreed within 0.04%.</li>
+              <li>On a separate analog front-end ASIC, validated a pre-silicon register configuration toolchain and caught 19 SPI writes per run landing on the wrong address before first silicon.</li>
+            </ul>
+          </details>
+          <div class="chips"><span>Python</span><span>PyVISA</span><span>SPI</span><span>I2C</span><span>GPIB</span><span>Raspberry Pi</span><span>OTP</span></div>
+        </div>
+      </article>
+
+      <article class="job card rv">
+        <div>
+          <div class="co">Teledyne DALSA</div>
+          <div class="role">Hardware Test Engineer</div>
+          <div class="when">Jan to Apr 2026 &middot; Waterloo, ON</div>
+        </div>
+        <div>
+          <ul class="pts">
+            <li>Developed low-level <b>SPI, I2C and UART drivers on STM32</b> in C from component datasheets, talking to 5+ embedded subsystems.</li>
+            <li>Wrote a Python script that runs 30+ electrical and functional tests over UART.</li>
+            <li>Designed an adapter PCB in Siemens PADS with an STM32, FMC, SPI and USB-UART to bridge the test bench to an FPGA.</li>
+          </ul>
+          <div class="chips"><span>C</span><span>STM32</span><span>Python</span><span>Siemens PADS</span><span>LTspice</span></div>
+        </div>
+      </article>
+
+      <article class="job card rv">
+        <div>
+          <div class="co">Teledyne DALSA</div>
+          <div class="role">Image Sensor Test Engineer</div>
+          <div class="when">May to Aug 2025 &middot; Waterloo, ON</div>
+        </div>
+        <div>
+          <ul class="pts">
+            <li>Tested and validated 10+ cameras before delivery using SPI command sequences.</li>
+            <li>Ran a Gauge R&amp;R study on 1,000+ data points from SQL and confirmed under 5% variation on the test bench.</li>
+            <li>Designed a fixture in Autodesk Inventor that mounts 12 circuit boards for probing and electrical test.</li>
+          </ul>
+          <div class="chips"><span>SPI</span><span>SQL</span><span>Oscilloscope</span><span>Autodesk Inventor</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="head"><h2 class="rv">About.</h2></div>
+    <div class="about">
+      <div class="bio rv">
+        <p>I'm a Mechatronics Engineering student at the University of Waterloo, and <b>I like working where code meets copper.</b></p>
+        <p>I want to write firmware for a living. My first co-op had me testing image sensors. My second had me writing STM32 drivers. Now I bring up silicon over SPI at onsemi. Every term has moved me one layer closer to the hardware, and that is where I want to stay.</p>
+        <p>I learn best by building the thing myself, which is why I wrote a kernel instead of only configuring one.</p>
+      </div>
+      <div class="kit rv" style="--rd:120ms">
+        <div><h4>Languages</h4><div class="chips"><span>C</span><span>Python</span><span>C++</span><span>VHDL</span></div></div>
+        <div><h4>Embedded</h4><div class="chips"><span>STM32</span><span>ARM Cortex-M</span><span>RTOS</span><span>SPI</span><span>I2C</span><span>UART</span><span>CAN</span><span>SWD</span><span>OpenOCD</span></div></div>
+        <div><h4>Validation and bench</h4><div class="chips"><span>ASIC bring-up</span><span>OTP trimming</span><span>Hardware-in-the-loop</span><span>PyVISA</span><span>Oscilloscope</span><span>SMU</span></div></div>
+        <div><h4>Tools</h4><div class="chips"><span>Git</span><span>Make</span><span>Altium</span><span>KiCAD</span><span>LTspice</span></div></div>
+        <div class="edu"><b>University of Waterloo</b>BASc, Honours Mechatronics Engineering, Co-op<br>President's Scholarship of Distinction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <h2 class="rv">Let's build <span class="g">something.</span></h2>
+    <p class="sub rv">I'm looking for embedded and firmware internships. The fastest way to reach me is email.</p>
+    <div class="links">
+      <a class="card lift rv" style="--rd:0ms" href="mailto:aattayi@uwaterloo.ca"><span><small>Email</small><strong>aattayi@uwaterloo.ca</strong></span><em aria-hidden="true">&#8599;</em></a>
+      <a class="card lift rv" style="--rd:90ms" href="tel:+12265812291"><span><small>Phone</small><strong>226-581-2291</strong></span><em aria-hidden="true">&#8599;</em></a>
+      <a class="card lift rv" style="--rd:0ms" href="https://www.linkedin.com/in/abid-attayi/" target="_blank" rel="noopener"><span><small>LinkedIn</small><strong>in/abid-attayi</strong></span><em aria-hidden="true">&#8599;</em></a>
+      <a class="card lift rv" style="--rd:90ms" href="https://github.com/abid-attayi" target="_blank" rel="noopener"><span><small>GitHub</small><strong>abid-attayi</strong></span><em aria-hidden="true">&#8599;</em></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap"><span>Abid Attayi</span><span>Waterloo, ON</span></div></footer>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hasIO = "IntersectionObserver" in window;
+  var $ = function (id) { return document.getElementById(id); };
+  var AMBER = "#FFB340", CYAN = "#40C8E0", ROSE = "#FF6F91", INK = "#F5F5F7", MUTED = "#A1A1A6", LINE = "rgba(255,255,255,.09)", DIM = "#5E5E66";
+
+  /* ---------- nav, progress, hero parallax ---------- */
+  var nav = $("nav"), bar = $("progress"), heroIn = $("heroIn");
+  function onScroll() {
+    var y = window.scrollY, max = root.scrollHeight - window.innerHeight;
+    bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, y / max) : 0) + ")";
+    nav.classList.toggle("solid", y > 20);
+    if (!reduce && y < 900) {
+      heroIn.style.transform = "translateY(" + (y * 0.22) + "px) scale(" + (1 - Math.min(0.08, y / 9000)) + ")";
+      heroIn.style.opacity = Math.max(0, 1 - y / 620);
+    }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+
+  /* active nav link */
+  if (hasIO) {
+    var links = {};
+    document.querySelectorAll(".nav nav a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { for (var k in links) links[k].classList.toggle("on", k === e.target.id); } });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    document.querySelectorAll("section[id]").forEach(function (s) { so.observe(s); });
+  }
+
+  /* ---------- count up ---------- */
+  function countUp(el) {
+    var end = +el.dataset.count, t0 = performance.now(), dur = 1500;
+    (function step(now) {
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = Math.round(end * e);
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
+  /* ---------- reveal on scroll: only elements below the fold start hidden ---------- */
+  if (hasIO && !reduce) {
+    var ro = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("in");
+        e.target.querySelectorAll("[data-count]").forEach(countUp);
+        ro.unobserve(e.target);
+      });
+    }, { rootMargin: "0px 0px -9% 0px" });
+    document.querySelectorAll(".rv").forEach(function (el) {
+      if (el.getBoundingClientRect().top > window.innerHeight * 0.92) el.classList.add("pre");
+      ro.observe(el);
+    });
+
+    /* kernel story: the step nearest the middle of the screen lights up */
+    var steps = [].slice.call(document.querySelectorAll(".step"));
+    var st = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) steps.forEach(function (s) { s.classList.toggle("on", s === e.target); }); });
+    }, { rootMargin: "-42% 0px -42% 0px" });
+    steps.forEach(function (s) { st.observe(s); });
+  } else {
+    document.querySelectorAll(".step").forEach(function (s) { s.classList.add("on"); });
+  }
+
+  /* ---------- spotlight on cards ---------- */
+  document.querySelectorAll(".card").forEach(function (p) {
+    p.addEventListener("pointermove", function (e) {
+      var r = p.getBoundingClientRect();
+      p.style.setProperty("--mx", (e.clientX - r.left) + "px");
+      p.style.setProperty("--my", (e.clientY - r.top) + "px");
+    });
+  });
+
+  /* ---------- canvas helpers ---------- */
+  function fit(cv) {
+    var r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1), c = cv.getContext("2d");
+    cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d));
+    c.setTransform(d, 0, 0, d, 0, 0);
+    return { w: r.width, h: r.height, c: c };
+  }
+  var tasks = [];
+  function addTask(el, fn, resize) {
+    var t = { el: el, fn: fn, vis: !hasIO, resize: resize };
+    tasks.push(t);
+    if (hasIO) new IntersectionObserver(function (es) { t.vis = es[0].isIntersecting; }).observe(el);
+  }
+  var last = performance.now();
+  function loop(now) {
+    var dt = Math.min(64, now - last); last = now;
+    for (var i = 0; i < tasks.length; i++) if (tasks[i].vis) tasks[i].fn(now, dt);
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener("resize", function () { tasks.forEach(function (t) { if (t.resize) t.resize(); t.fn(performance.now(), 0); }); });
+  var FONT = "'Geist Mono', ui-monospace, Menlo, Consolas, monospace";
+
+  /* ---------- hero: PCB traces with signal pulses ---------- */
+  (function () {
+    var cv = $("traces"), W, H, c, traces = [];
+    var D = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
+    function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    function build() {
+      var f = fit(cv); W = f.w; H = f.h; c = f.c; traces = [];
+      var R = rng(11), g = 32, n = Math.max(24, Math.min(60, Math.round(W / 28)));
+      for (var i = 0; i < n; i++) {
+        var edge = (R() * 4) | 0, x, y, d;
+        if (edge === 0) { x = 0; y = Math.round(R() * H / g) * g; d = 0; }
+        else if (edge === 1) { x = W; y = Math.round(R() * H / g) * g; d = 4; }
+        else if (edge === 2) { x = Math.round(R() * W / g) * g; y = 0; d = 2; }
+        else { x = Math.round(R() * W / g) * g; y = H; d = 6; }
+        var pts = [[x, y]], len = [0], tot = 0, segs = 3 + ((R() * 4) | 0);
+        for (var s = 0; s < segs; s++) {
+          var L = g * (2 + ((R() * 7) | 0)), nx = x + D[d][0] * L, ny = y + D[d][1] * L;
+          tot += Math.hypot(nx - x, ny - y); x = nx; y = ny; pts.push([x, y]); len.push(tot);
+          d = (d + (R() < 0.5 ? 1 : 7)) % 8;
+        }
+        var pick = R();
+        traces.push({ p: pts, l: len, tot: tot, delay: R() * 1400, off: R() * 4000, sp: 0.07 + R() * 0.09, col: pick < 0.5 ? AMBER : pick < 0.8 ? ROSE : CYAN, gap: 500 + R() * 1500 });
+      }
+    }
+    function path(t, a, b) {
+      c.beginPath(); var started = false;
+      for (var i = 0; i < t.p.length - 1; i++) {
+        var l0 = t.l[i], l1 = t.l[i + 1];
+        if (l1 <= a) continue; if (l0 >= b) break;
+        var s = Math.max(a, l0), e = Math.min(b, l1), sl = l1 - l0;
+        var ax = t.p[i][0] + (t.p[i + 1][0] - t.p[i][0]) * (s - l0) / sl, ay = t.p[i][1] + (t.p[i + 1][1] - t.p[i][1]) * (s - l0) / sl;
+        var bx = t.p[i][0] + (t.p[i + 1][0] - t.p[i][0]) * (e - l0) / sl, by = t.p[i][1] + (t.p[i + 1][1] - t.p[i][1]) * (e - l0) / sl;
+        if (!started) { c.moveTo(ax, ay); started = true; }
+        c.lineTo(bx, by);
+      }
+      c.stroke();
+    }
+    var t0 = performance.now();
+    function draw(now) {
+      var t = reduce ? 1e6 : now - t0;
+      c.clearRect(0, 0, W, H); c.lineJoin = "round"; c.lineCap = "round";
+      for (var i = 0; i < traces.length; i++) {
+        var tr = traces[i], p = Math.max(0, Math.min(1, (t - tr.delay) / 1800)); p = 1 - Math.pow(1 - p, 3);
+        if (p <= 0) continue;
+        c.shadowBlur = 0; c.strokeStyle = "rgba(255,255,255,.13)"; c.lineWidth = 1.2;
+        path(tr, 0, tr.tot * p);
+        if (p >= 1) {
+          var e = tr.p[tr.p.length - 1];
+          c.beginPath(); c.arc(e[0], e[1], 3.5, 0, 6.3); c.fillStyle = "#000"; c.fill(); c.strokeStyle = "rgba(255,255,255,.3)"; c.stroke();
+          if (!reduce) {
+            var pos = ((t + tr.off) * tr.sp) % (tr.tot + tr.gap);
+            if (pos < tr.tot + 50) {
+              c.strokeStyle = tr.col; c.lineWidth = 1.8; c.shadowColor = tr.col; c.shadowBlur = 12;
+              path(tr, Math.max(0, pos - 50), Math.min(tr.tot, pos));
+            }
+          }
+        }
+      }
+      c.shadowBlur = 0;
+    }
+    build(); draw(performance.now());
+    addTask(cv, draw, build);
+  })();
+
+  /* ---------- RTOS scheduler ---------- */
+  (function () {
+    var cv = $("sched"), msg = $("schedMsg"), add = $("thAdd"), del = $("thDel"), pause = $("thPause");
+    var W, H, c, th = [200, 120, 80], segs = [], t = 0, cur = 0, end = 0, paused = false, win = 2000, shown = -1;
+    var cols = [AMBER, CYAN, ROSE, "#8BF5A5", "#C59BFF", INK];
+    function size() { var f = fit(cv); W = f.w; H = f.h; c = f.c; }
+    function fill() {
+      while (end < t + 1) { segs.push({ th: cur, a: end, b: end + th[cur] }); end += th[cur]; cur = (cur + 1) % th.length; }
+      while (segs.length && segs[0].b < t - win) segs.shift();
+    }
+    function rr(x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); c.fill(); }
+    function draw(now, dt) {
+      if (!paused && !reduce) t += dt * 0.5;
+      fill();
+      var n = th.length, gut = 50, top = 38, bot = 18, x0 = gut, x1 = W - 22, span = x1 - x0, lh = (H - top - bot) / n, st = t - win;
+      c.clearRect(0, 0, W, H);
+      c.font = "12px " + FONT; c.textBaseline = "middle";
+      c.strokeStyle = "rgba(255,255,255,.16)"; c.lineWidth = 1;
+      for (var m = Math.ceil(st / 100) * 100; m < t; m += 100) {
+        var rx = x0 + (m - st) / win * span, big = m % 500 === 0;
+        c.beginPath(); c.moveTo(rx, top - (big ? 14 : 7)); c.lineTo(rx, top - 3); c.stroke();
+      }
+      for (var i = 0; i < n; i++) {
+        var cy = top + lh * i + lh / 2;
+        c.fillStyle = MUTED; c.fillText("T" + i, 20, cy);
+        c.strokeStyle = LINE; c.beginPath(); c.moveTo(x0, cy); c.lineTo(x1, cy); c.stroke();
+      }
+      var bh = Math.min(34, lh * 0.58);
+      for (var s = 0; s < segs.length; s++) {
+        var g = segs[s]; if (g.th >= n) continue;
+        var a = Math.max(g.a, st), b = Math.min(g.b, t); if (b <= a) continue;
+        var xa = x0 + (a - st) / win * span, xb = x0 + (b - st) / win * span, y = top + lh * g.th + (lh - bh) / 2, live = g.b > t;
+        c.fillStyle = cols[g.th % cols.length]; c.globalAlpha = live ? 1 : 0.42;
+        if (live) { c.shadowColor = cols[g.th % cols.length]; c.shadowBlur = 18; }
+        rr(xa, y, Math.max(2, xb - xa - 3), bh, 6);
+        c.shadowBlur = 0; c.globalAlpha = 1;
+      }
+      c.strokeStyle = INK; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x1, top - 16); c.lineTo(x1, H - bot + 4); c.stroke();
+      var rth = 0; for (var k = segs.length - 1; k >= 0; k--) if (segs[k].a <= t) { rth = segs[k].th; break; }
+      if (rth !== shown) { shown = rth; msg.innerHTML = "Running <b>thread " + rth + "</b> of " + n; }
+    }
+    function sync() { add.disabled = th.length >= 6; del.disabled = th.length <= 2; shown = -1; }
+    add.addEventListener("click", function () { th.push([60, 100, 140, 180][(Math.random() * 4) | 0]); sync(); draw(0, 0); });
+    del.addEventListener("click", function () { th.pop(); if (cur >= th.length) cur = 0; sync(); draw(0, 0); });
+    pause.addEventListener("click", function () { paused = !paused; pause.textContent = paused ? "Resume" : "Pause"; });
+    size(); t = win; sync(); draw(0, 0);
+    addTask(cv, draw, size);
+  })();
+
+  /* ---------- quadrature waveform ---------- */
+  (function () {
+    var cv = $("quad"), W, H, c, rate = 3.2;
+    function size() { var f = fit(cv); W = f.w; H = f.h; c = f.c; }
+    function phi(s) { var k = Math.floor(s / 9), u = s - k * 9; return k * 3 * rate + (u < 6 ? rate * u : rate * (12 - u)); }
+    function draw(now) {
+      var s = reduce ? 3 : now / 1000, pps = 46, x1 = W - 78, la = H * 0.34, lb = H * 0.7, amp = 16;
+      c.clearRect(0, 0, W, H); c.lineWidth = 1.8; c.lineJoin = "round";
+      [[la, AMBER, 0], [lb, CYAN, 1]].forEach(function (ch) {
+        c.strokeStyle = ch[1]; c.shadowColor = ch[1]; c.shadowBlur = 8; c.beginPath();
+        for (var x = 0; x <= x1; x += 1) {
+          var st = ((Math.floor(phi(s - (x1 - x) / pps)) % 4) + 4) % 4;
+          var hi = ch[2] === 0 ? (st === 1 || st === 2) : (st === 2 || st === 3);
+          var y = ch[0] + (hi ? -amp : amp);
+          if (x === 0) c.moveTo(x, y); else c.lineTo(x, y);
+        }
+        c.stroke();
+      });
+      c.shadowBlur = 0;
+      c.font = "12px " + FONT; c.textBaseline = "middle"; c.textAlign = "left";
+      c.fillStyle = AMBER; c.fillText("A", x1 + 10, la); c.fillStyle = CYAN; c.fillText("B", x1 + 10, lb);
+      var cnt = ((Math.floor(phi(s)) % 32) + 32) % 32, up = (s % 9) < 6;
+      c.fillStyle = INK; c.font = "500 24px " + FONT; c.textAlign = "right";
+      c.fillText((cnt < 10 ? "0" : "") + cnt, W - 16, la + 2);
+      c.font = "11px " + FONT; c.fillStyle = MUTED;
+      c.fillText(up ? "UP" : "DOWN", W - 16, lb); c.textAlign = "left";
+    }
+    size(); draw(performance.now());
+    addTask(cv, draw, size);
+  })();
+
+  if (!reduce) requestAnimationFrame(loop);
+
+  /* ---------- boot sequence card ---------- */
+  (function () {
+    var li = [].slice.call($("boot").children), i = 0;
+    function set(k) { li.forEach(function (el, j) { el.className = j < k ? "done" : j === k ? "on" : ""; }); }
+    set(reduce ? 3 : 0);
+    if (!reduce) setInterval(function () { i = (i + 1) % (li.length + 2); set(Math.min(i, li.length - 1)); }, 850);
+  })();
+
+  /* ---------- clock card ---------- */
+  (function () {
+    var el = $("clock");
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    function tick() { var d = new Date(); el.textContent = p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds()); }
+    tick(); setInterval(tick, 1000);
+  })();
+
+  /* ---------- CAN feed (decorative) ---------- */
+  (function () {
+    var el = $("canFeed"), R = 11, html = "";
+    function r() { R = (R * 1103515245 + 12345) & 0x7fffffff; return R / 0x7fffffff; }
+    function hx(n, w) { var s = Math.floor(n).toString(16).toUpperCase(); while (s.length < w) s = "0" + s; return s; }
+    for (var i = 0; i < 16; i++) {
+      var d = ""; for (var j = 0; j < 8; j++) d += hx(r() * 256, 2) + " ";
+      html += "<span><b>0x" + hx(r() * 2048, 3) + "</b> [8] " + d.trim() + "</span>";
+    }
+    el.innerHTML = html + html;
+  })();
+
+  /* ---------- trim widget ---------- */
+  (function () {
+    var box = $("trim"), range = $("trRange"), probe = $("trProbe"), msg = $("trMsg"), target = 0.63, vis = !hasIO, busy = false;
+    function show(lo, hi) { range.style.left = (lo * 100) + "%"; range.style.width = ((hi - lo) * 100) + "%"; }
+    function run() {
+      if (busy) return; busy = true;
+      var lo = 0, hi = 1, n = 0;
+      probe.classList.remove("hit"); msg.className = ""; show(0, 1);
+      (function step() {
+        var mid = (lo + hi) / 2; n++;
+        probe.style.left = (mid * 100) + "%";
+        msg.textContent = "Measurement " + n + ": probing the midpoint.";
+        setTimeout(function () {
+          if (n >= 6) {
+            probe.style.left = (target * 100) + "%"; probe.classList.add("hit");
+            msg.className = "ok"; msg.textContent = "In spec. Final trim code burned to OTP.";
+            setTimeout(function () { busy = false; if (vis) run(); }, 3200);
+            return;
+          }
+          if (mid > target) { hi = mid; msg.textContent = "Measurement " + n + ": reads high. Keep the lower half."; }
+          else { lo = mid; msg.textContent = "Measurement " + n + ": reads low. Keep the upper half."; }
+          show(lo, hi);
+          setTimeout(step, 900);
+        }, 700);
+      })();
+    }
+    if (reduce) { show(0.6, 0.66); probe.style.left = "63%"; probe.classList.add("hit"); return; }
+    if (hasIO) new IntersectionObserver(function (es) { vis = es[0].isIntersecting; if (vis) run(); }, { threshold: 0.4 }).observe(box);
+    else run();
+  })();
+})();
+</script>
+</body>
+</html>
